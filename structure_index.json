@@ -1,0 +1,951 @@
+{
+  "upper": {
+    "parts": [
+      {
+        "id": 1,
+        "name": "第一部分",
+        "title": "解题方法及技巧",
+        "type": "intro",
+        "start_line": 1,
+        "end_line": 79,
+        "chapters": [],
+        "topics": [],
+        "papers": []
+      },
+      {
+        "id": 2,
+        "name": "第二部分",
+        "title": "分阶·刷小题",
+        "type": "objective",
+        "start_line": 80,
+        "end_line": 6538,
+        "chapters": [
+          {
+            "id": 1,
+            "title": "第一章 总论",
+            "start_line": 87,
+            "end_line": 289,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 96,
+                "end_line": 177,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 178,
+                "end_line": 298,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "title": "第二章 存货",
+            "start_line": 290,
+            "end_line": 462,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 299,
+                "end_line": 412,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 413,
+                "end_line": 471,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "第三章 固定资产",
+            "start_line": 463,
+            "end_line": 623,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 472,
+                "end_line": 533,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 534,
+                "end_line": 632,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "title": "第四章 无形资产",
+            "start_line": 624,
+            "end_line": 784,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 633,
+                "end_line": 714,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 715,
+                "end_line": 793,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "title": "第五章 投资性房地产",
+            "start_line": 785,
+            "end_line": 957,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 794,
+                "end_line": 855,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 856,
+                "end_line": 966,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 6,
+            "title": "第六章 长期股权投资与合营安排",
+            "start_line": 958,
+            "end_line": 1343,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 967,
+                "end_line": 1165,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 1166,
+                "end_line": 1352,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 7,
+            "title": "第七章 资产减值",
+            "start_line": 1344,
+            "end_line": 1518,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 1353,
+                "end_line": 1434,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 1435,
+                "end_line": 1527,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "title": "第八章 负债",
+            "start_line": 1519,
+            "end_line": 1653,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 1528,
+                "end_line": 1595,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 1596,
+                "end_line": 1662,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 9,
+            "title": "第九章 职工薪酬",
+            "start_line": 1654,
+            "end_line": 1806,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 1663,
+                "end_line": 1734,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 1735,
+                "end_line": 1815,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "title": "第十章 股份支付",
+            "start_line": 1807,
+            "end_line": 2039,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 1816,
+                "end_line": 1937,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 1938,
+                "end_line": 2048,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 11,
+            "title": "第十一章 借款费用",
+            "start_line": 2040,
+            "end_line": 2182,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 2049,
+                "end_line": 2140,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 2141,
+                "end_line": 2191,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 12,
+            "title": "第十二章 或有事项",
+            "start_line": 2183,
+            "end_line": 2339,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 2192,
+                "end_line": 2263,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 2264,
+                "end_line": 2348,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 13,
+            "title": "第十三章 金融工具与保险合同",
+            "start_line": 2340,
+            "end_line": 2706,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 2349,
+                "end_line": 2520,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 2521,
+                "end_line": 2715,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 14,
+            "title": "第十四章 租赁",
+            "start_line": 2707,
+            "end_line": 2989,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 2716,
+                "end_line": 2847,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 2848,
+                "end_line": 2998,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 15,
+            "title": "第十五章 持有待售的非流动资产、处置组和终止经营",
+            "start_line": 2990,
+            "end_line": 3149,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 2999,
+                "end_line": 3067,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 3068,
+                "end_line": 3158,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 16,
+            "title": "第十六章 所有者权益",
+            "start_line": 3150,
+            "end_line": 3268,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 3159,
+                "end_line": 3220,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 3221,
+                "end_line": 3277,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 17,
+            "title": "第十七章 收入、费用和利润",
+            "start_line": 3269,
+            "end_line": 3694,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 3278,
+                "end_line": 3449,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 3450,
+                "end_line": 3703,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 18,
+            "title": "第十八章 政府补助",
+            "start_line": 3695,
+            "end_line": 3893,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 3704,
+                "end_line": 3785,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 3786,
+                "end_line": 3902,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 19,
+            "title": "第十九章 所得税",
+            "start_line": 3894,
+            "end_line": 4214,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 3903,
+                "end_line": 4054,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 4055,
+                "end_line": 4223,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 20,
+            "title": "第二十章 非货币性资产交换",
+            "start_line": 4215,
+            "end_line": 4387,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 4224,
+                "end_line": 4325,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 4326,
+                "end_line": 4396,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 21,
+            "title": "第二十一章 债务重组",
+            "start_line": 4388,
+            "end_line": 4612,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 4397,
+                "end_line": 4540,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 4541,
+                "end_line": 4621,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 22,
+            "title": "第二十二章 外币折算",
+            "start_line": 4613,
+            "end_line": 4822,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 4622,
+                "end_line": 4723,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 4724,
+                "end_line": 4831,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 23,
+            "title": "第二十三章 财务报告",
+            "start_line": 4823,
+            "end_line": 5110,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 4832,
+                "end_line": 4953,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 4954,
+                "end_line": 5119,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 24,
+            "title": "第二十四章 会计政策、会计估计及其变更和差错更正",
+            "start_line": 5111,
+            "end_line": 5303,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 5120,
+                "end_line": 5181,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 5182,
+                "end_line": 5312,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 25,
+            "title": "第二十五章 资产负债表日后事项",
+            "start_line": 5304,
+            "end_line": 5456,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 5313,
+                "end_line": 5374,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 5375,
+                "end_line": 5465,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 26,
+            "title": "第二十六章 企业合并",
+            "start_line": 5457,
+            "end_line": 5642,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 5466,
+                "end_line": 5557,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 5558,
+                "end_line": 5651,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 27,
+            "title": "第二十七章 合并财务报表",
+            "start_line": 5643,
+            "end_line": 5907,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 5652,
+                "end_line": 5785,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 5786,
+                "end_line": 5916,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 28,
+            "title": "第二十八章 每股收益",
+            "start_line": 5908,
+            "end_line": 6116,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 5917,
+                "end_line": 6038,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 6039,
+                "end_line": 6125,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 29,
+            "title": "第二十九章 公允价值计量",
+            "start_line": 6117,
+            "end_line": 6263,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 6126,
+                "end_line": 6209,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 6210,
+                "end_line": 6272,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "id": 30,
+            "title": "第三十章 政府及民间非营利组织会计",
+            "start_line": 6264,
+            "end_line": 9148,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 6273,
+                "end_line": 6426,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 6427,
+                "end_line": 6554,
+                "questions": []
+              }
+            ]
+          }
+        ],
+        "topics": [],
+        "papers": []
+      },
+      {
+        "id": 3,
+        "name": "第三部分",
+        "title": "晋级·刷大题",
+        "type": "subjective",
+        "start_line": 6539,
+        "end_line": 8296,
+        "chapters": [],
+        "topics": [
+          {
+            "name": "专题一 股份支付",
+            "start_line": 6546,
+            "end_line": 6726,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 6555,
+                "end_line": 6654,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 6655,
+                "end_line": 6735,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题二 金融工具",
+            "start_line": 6727,
+            "end_line": 6901,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 6736,
+                "end_line": 6847,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 6848,
+                "end_line": 6910,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题三 租赁",
+            "start_line": 6902,
+            "end_line": 7092,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 6911,
+                "end_line": 7038,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 7039,
+                "end_line": 7101,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题四 收入",
+            "start_line": 7093,
+            "end_line": 7385,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 7102,
+                "end_line": 7177,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 7178,
+                "end_line": 7394,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题五 所得税",
+            "start_line": 7386,
+            "end_line": 7624,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 7395,
+                "end_line": 7454,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 7455,
+                "end_line": 7633,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题六 长期股权投资、企业合并、合并财务报表",
+            "start_line": 7625,
+            "end_line": 7963,
+            "sections": [
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 7634,
+                "end_line": 7703,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 7704,
+                "end_line": 7972,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "专题七 跨章节综合题",
+            "start_line": 7964,
+            "end_line": 9148,
+            "sections": [
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 7973,
+                "end_line": 8314,
+                "questions": []
+              }
+            ]
+          }
+        ],
+        "papers": []
+      },
+      {
+        "id": 4,
+        "name": "第四部分",
+        "title": "实战·刷套卷",
+        "type": "mock_exam",
+        "start_line": 8297,
+        "end_line": 9148,
+        "chapters": [],
+        "topics": [],
+        "papers": [
+          {
+            "name": "实战套卷（一）",
+            "start_line": 8306,
+            "end_line": 8728,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 8315,
+                "end_line": 8448,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 8449,
+                "end_line": 8572,
+                "questions": []
+              },
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 8573,
+                "end_line": 8630,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 8631,
+                "end_line": 8737,
+                "questions": []
+              }
+            ]
+          },
+          {
+            "name": "实战套卷（二）",
+            "start_line": 8729,
+            "end_line": 9148,
+            "sections": [
+              {
+                "name": "单项选择题",
+                "type": "single_choice",
+                "start_line": 8738,
+                "end_line": 8871,
+                "questions": []
+              },
+              {
+                "name": "多项选择题",
+                "type": "multiple_choice",
+                "start_line": 8872,
+                "end_line": 8995,
+                "questions": []
+              },
+              {
+                "name": "计算分析题",
+                "type": "calculation",
+                "start_line": 8996,
+                "end_line": 9053,
+                "questions": []
+              },
+              {
+                "name": "综合题",
+                "type": "comprehensive",
+                "start_line": 9054,
+                "end_line": 9148,
+                "questions": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "lower": {
+    "parts": [
+      {
+        "id": 1,
+        "name": "第一部分",
+        "title": "小题·参考答案及解析",
+        "type": "objective_answers",
+        "start_line": 1,
+        "end_line": 5652
+      },
+      {
+        "id": 2,
+        "name": "第二部分",
+        "title": "大题·参考答案及解析",
+        "type": "subjective_answers",
+        "start_line": 5653,
+        "end_line": 8966
+      },
+      {
+        "id": 3,
+        "name": "第三部分",
+        "title": "套卷·参考答案及解析",
+        "type": "mock_exam_answers",
+        "start_line": 8967,
+        "end_line": 10008
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+*.pyc
+__pycache__/
+.venv/
+.pypdf_local/
+*.DS_Store
+
+# OCR temp files
+.ocr_temp.png
+.ocr_test_temp.png
+.scan_temp.png
+.temp_ans.png
+.temp_scan.png
+.temp.png
+.tmp_ocr/
+
+# PDF files (too large for git)
+*.pdf
+
+# Scan results (intermediate)
+chapter_scan.json
+chapter_scan_result.json
+find_chapters_output.log
+test_output.txt
+pdf_extractor.py
+
+# Intermediate results
+questions_ch*.json
+
+# Embedded version (generated)
+index_embedded.html
+
+# PDF text extraction output
+pdf_text/
+pdf_text_*/
+*.txt
+
+# MinerU JSON source files (too large for git)
+file_json/
+
+# Test files
+ocr_test.png
+index_local.html
+serve.js
