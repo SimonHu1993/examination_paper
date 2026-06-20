@@ -97,10 +97,15 @@ const Navigation = {
             const questionCount = this.getChapterQuestionCount(chapter);
             const isActive = App.currentChapter && App.currentChapter.id === chapter.id;
             
+            // 检查是否有答题进度（包括已完成的和进行中的）
+            const hasProgress = progress && progress.completed;
+            const answerProgress = Storage.getAnswerProgress(chapter.id);
+            const hasAnsweredQuestions = answerProgress && Object.keys(answerProgress).length > 0;
+            
             html += `
                 <div class="nav-item ${isActive ? 'active' : ''}" data-chapter-id="${chapter.id}">
                     <div class="nav-item-title">${chapter.title}</div>
-                    <div class="nav-item-meta">${questionCount} 题${progress ? ' · 最佳 ' + progress.bestScore + '%' : ''}</div>
+                    <div class="nav-item-meta">${questionCount} 题${hasProgress || hasAnsweredQuestions ? ' · 最佳 ' + (progress?.bestScore || 0) + '%' : ''}</div>
                 </div>
             `;
         });
@@ -207,12 +212,18 @@ const Navigation = {
     updateProgress(chapterId) {
         const progress = Storage.getChapterProgressById(chapterId);
         
+        // 检查是否有答题进度（包括已完成的和进行中的）
+        const hasProgress = progress && progress.completed;
+        const answerProgress = Storage.getAnswerProgress(chapterId);
+        const hasAnsweredQuestions = answerProgress && Object.keys(answerProgress).length > 0;
+        
         const navItem = this.elements.sidebarNav.querySelector(`[data-chapter-id="${chapterId}"]`);
-        if (navItem && progress) {
+        if (navItem && (hasProgress || hasAnsweredQuestions)) {
             const meta = navItem.querySelector('.nav-item-meta');
             const chapter = this.quizData.chapters.find(ch => ch.id === chapterId);
             const questionCount = this.getChapterQuestionCount(chapter);
-            meta.textContent = `${questionCount} 题 · 最佳 ${progress.bestScore}%`;
+            const scoreText = ' · 最佳 ' + (progress?.bestScore || 0) + '%';
+            meta.textContent = `${questionCount} 题${scoreText}`;
         }
 
         const card = this.elements.chapterGrid.querySelector(`[data-chapter-id="${chapterId}"]`);

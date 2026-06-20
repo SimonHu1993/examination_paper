@@ -33,7 +33,10 @@ const Quiz = {
             resultScore: document.getElementById('resultScore'),
             resultStats: document.getElementById('resultStats'),
             retryBtn: document.getElementById('retryBtn'),
-            backBtn: document.getElementById('backBtn')
+            backBtn: document.getElementById('backBtn'),
+            // 新增：题目列表相关元素
+            questionList: document.getElementById('questionList'),
+            sidebarStats: document.getElementById('sidebarStats')
         };
 
         this.bindEvents();
@@ -56,7 +59,6 @@ const Quiz = {
     start(chapter) {
         this.currentChapter = chapter;
         this.mode = Storage.getMode();
-        this.userAnswers = {};
         this.currentIndex = 0;
         this.showExplanation = false;
 
@@ -77,6 +79,10 @@ const Quiz = {
             return;
         }
 
+        // 尝试恢复之前的答题进度
+        const savedAnswers = Storage.getAnswerProgress(chapter.id);
+        this.userAnswers = savedAnswers || {};
+
         // 切换视图
         this.showView('quiz');
         
@@ -86,6 +92,12 @@ const Quiz = {
         // 渲染第一题
         this.renderQuestion();
         this.updateButtons();
+        
+        // 渲染题目列表
+        this.renderQuestionList();
+        
+        // 立即更新题目列表状态（显示已答题目）
+        this.updateQuestionListStatus();
     },
 
     /**
@@ -98,7 +110,19 @@ const Quiz = {
         const isSubjective = !question.options || question.options.length === 0;
         const selectedOptions = this.userAnswers[question.id] || [];
         const isAnswered = selectedOptions.length > 0;
-        const showFeedback = this.mode === 'open' && isAnswered;
+        
+        // 单选题：开卷模式下立即显示反馈
+        // 多选题/解析题：需要点击"查看解析"才显示反馈
+        const isMultipleChoice = question.sectionType === 'multiple_choice';
+        let showFeedback;
+        if (isSubjective) {
+            showFeedback = this.showExplanation && isAnswered;
+        } else if (isMultipleChoice) {
+            showFeedback = this.showExplanation && isAnswered;
+        } else {
+            // 单选题
+            showFeedback = this.mode === 'open' && isAnswered;
+        }
 
         let html = `
             <div class="question-number">第 ${this.currentIndex + 1} 题 / 共 ${this.questions.length} 题 · ${question.sectionName}</div>
@@ -110,7 +134,8 @@ const Quiz = {
             html += `
                 <div class="subjective-prompt">💡 这是一道主观题，请先在纸上作答，然后点击查看解析</div>
             `;
-            if (this.showExplanation || this.mode === 'open') {
+            // 只有点击了"查看解析"按钮才显示解析内容
+            if (this.showExplanation) {
                 html += this.renderExplanation(question);
             }
             html += `<button class="btn btn-show-explanation" id="showExplBtn">查看解析</button>`;
@@ -133,6 +158,12 @@ const Quiz = {
             });
             html += '</ul>';
 
+            // 多选题：如果已答题但未显示反馈，显示"查看解析"按钮
+            const isMultipleChoice = question.sectionType === 'multiple_choice';
+            if (isMultipleChoice && isAnswered && !showFeedback) {
+                html += `<button class="btn btn-show-explanation" id="showExplBtn">查看解析</button>`;
+            }
+
             if (showFeedback) {
                 const isCorrect = this.checkAnswer(question.answer, selectedOptions);
                 html += this.renderFeedback(isCorrect, question);
@@ -150,6 +181,25 @@ const Quiz = {
         if (showExplBtn) {
             showExplBtn.addEventListener('click', () => {
                 this.showExplanation = true;
+                
+                // 多选题/解析题：点击"查看解析"时记录错题
+                const question = this.questions[this.currentIndex];
+                const isMultipleChoice = question.sectionType === 'multiple_choice';
+                const isSubjective = !question.options || question.options.length === 0;
+                
+                if (this.mode === 'open' && (isMultipleChoice || isSubjective)) {
+                    const selectedOptions = this.userAnswers[question.id] || [];
+                    const isCorrect = this.checkAnswer(question.answer, selectedOptions);
+                    if (!isCorrect) {
+                        Storage.saveWrongQuestion(question.id, selectedOptions, question.answer);
+                    } else {
+                        Storage.removeWrongQuestion(question.id);
+                    }
+
+                    // 检查是否完成本节
+                    this.checkSectionCompletion();
+                }
+                
                 this.renderQuestion();
             });
         }
@@ -160,6 +210,9 @@ const Quiz = {
         }
 
         this.elements.quizProgress.textContent = `${this.currentIndex + 1} / ${this.questions.length}`;
+        
+        // 更新题目列表状态
+        this.updateQuestionListStatus();
     },
 
     /**
@@ -175,9 +228,10 @@ const Quiz = {
      */
     renderExplanation(question) {
         if (!question.explanation) return '';
+        // 解析可能包含HTML标签（如表格），需要直接渲染
         return `
             <div class="feedback-explanation">
-                <strong>解析：</strong>${this.formatText(question.explanation)}
+                <strong>解析：</strong>${question.explanation}
             </div>
         `;
     },
@@ -214,13 +268,15 @@ const Quiz = {
         const question = this.questions[this.currentIndex];
         const label = e.currentTarget.dataset.label;
         
-        // 开卷模式下，已答题不允许再改
-        if (this.mode === 'open' && this.userAnswers[question.id]) {
-            return;
-        }
-
         // 获取当前选择
         let selected = this.userAnswers[question.id] || [];
+        
+        // 开卷模式下，单选题选择后不允许再改（因为立即显示对错）
+        // 多选题允许继续修改，直到点击"查看解析"
+        const isMultipleChoice = question.sectionType === 'multiple_choice';
+        if (this.mode === 'open' && !isMultipleChoice && this.userAnswers[question.id]) {
+            return;
+        }
 
         if (question.sectionType === 'multiple_choice') {
             // 多选题：切换选择
@@ -236,8 +292,11 @@ const Quiz = {
 
         this.userAnswers[question.id] = selected;
 
-        // 开卷模式：选择后立即显示反馈
-        if (this.mode === 'open') {
+        // 保存答题进度到本地存储
+        Storage.saveAnswerProgress(this.currentChapter.id, this.userAnswers);
+
+        // 单选题：开卷模式下立即检查答案并记录错题
+        if (this.mode === 'open' && !isMultipleChoice) {
             // 记录错题
             const isCorrect = this.checkAnswer(question.answer, selected);
             if (!isCorrect) {
@@ -341,6 +400,9 @@ const Quiz = {
 
         // 保存进度
         Storage.saveChapterProgress(this.currentChapter.id, true, score);
+        
+        // 答题完成，清除临时进度
+        Storage.clearAnswerProgress(this.currentChapter.id);
 
         // 显示结果
         this.showResult(score, correctCount, totalQuestions);
@@ -374,6 +436,9 @@ const Quiz = {
                 this.mode
             );
             Storage.saveChapterProgress(this.currentChapter.id, true, score);
+            
+            // 答题完成，清除临时进度
+            Storage.clearAnswerProgress(this.currentChapter.id);
 
             // 更新导航进度
             Navigation.updateProgress(this.currentChapter.id);
@@ -401,6 +466,8 @@ const Quiz = {
      */
     retry() {
         if (this.currentChapter) {
+            // 清除之前的答题进度
+            Storage.clearAnswerProgress(this.currentChapter.id);
             this.start(this.currentChapter);
         }
     },
@@ -420,5 +487,80 @@ const Quiz = {
         this.elements.homeView.style.display = view === 'home' ? 'block' : 'none';
         this.elements.quizView.style.display = view === 'quiz' ? 'block' : 'none';
         this.elements.resultView.style.display = view === 'result' ? 'flex' : 'none';
+    },
+
+    /**
+     * 渲染题目列表
+     */
+    renderQuestionList() {
+        if (!this.elements.questionList) return;
+
+        const html = this.questions.map((question, index) => {
+            return `
+                <div class="question-item" data-index="${index}" onclick="Quiz.jumpToQuestion(${index})">
+                    ${index + 1}
+                </div>
+            `;
+        }).join('');
+
+        this.elements.questionList.innerHTML = html;
+        
+        // 更新统计信息
+        this.updateSidebarStats();
+    },
+
+    /**
+     * 更新题目列表状态
+     */
+    updateQuestionListStatus() {
+        if (!this.elements.questionList) return;
+
+        const items = this.elements.questionList.querySelectorAll('.question-item');
+        items.forEach((item, index) => {
+            // 移除所有状态类
+            item.classList.remove('active', 'answered', 'current');
+            
+            // 当前题目
+            if (index === this.currentIndex) {
+                item.classList.add('active');
+            }
+            
+            // 已作答的题目
+            const question = this.questions[index];
+            if (this.userAnswers[question.id] && this.userAnswers[question.id].length > 0) {
+                item.classList.add('answered');
+            }
+        });
+        
+        // 更新统计信息
+        this.updateSidebarStats();
+    },
+
+    /**
+     * 更新侧边栏统计信息
+     */
+    updateSidebarStats() {
+        if (!this.elements.sidebarStats) return;
+
+        const answeredCount = Object.keys(this.userAnswers).filter(id => {
+            return this.userAnswers[id] && this.userAnswers[id].length > 0;
+        }).length;
+
+        const totalCount = this.questions.length;
+        const remainingCount = totalCount - answeredCount;
+
+        this.elements.sidebarStats.textContent = `${answeredCount}/${totalCount} 已答`;
+    },
+
+    /**
+     * 跳转到指定题目
+     */
+    jumpToQuestion(index) {
+        if (index >= 0 && index < this.questions.length) {
+            this.currentIndex = index;
+            this.showExplanation = false;
+            this.renderQuestion();
+            this.updateButtons();
+        }
     }
 };

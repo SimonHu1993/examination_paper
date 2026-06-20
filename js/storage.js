@@ -9,7 +9,8 @@ const Storage = {
         WRONG_QUESTIONS: 'wrongQuestions',
         QUIZ_HISTORY: 'quizHistory',
         CHAPTER_PROGRESS: 'chapterProgress',
-        SETTINGS: 'settings'
+        SETTINGS: 'settings',
+        ANSWER_PROGRESS: 'answerProgress'  // 新增：答题进度
     },
 
     /**
@@ -58,11 +59,13 @@ const Storage = {
             userAnswer,
             correctAnswer,
             timestamp: Date.now(),
-            reviewed: false
+            reviewed: false,
+            understood: false  // 新增：标记是否已理解
         };
 
         if (existingIndex >= 0) {
-            // 更新已有记录
+            // 更新已有记录，保留understood状态
+            wrongItem.understood = wrongQuestions[existingIndex].understood || false;
             wrongQuestions[existingIndex] = wrongItem;
         } else {
             // 添加新记录
@@ -89,6 +92,18 @@ const Storage = {
         const item = wrongQuestions.find(w => w.questionId === questionId);
         if (item) {
             item.reviewed = true;
+            localStorage.setItem(this.KEYS.WRONG_QUESTIONS, JSON.stringify(wrongQuestions));
+        }
+    },
+    
+    /**
+     * 标记错题为已理解/取消理解
+     */
+    markWrongAsUnderstood(questionId, understood) {
+        const wrongQuestions = this.getWrongQuestions();
+        const item = wrongQuestions.find(w => w.questionId === questionId);
+        if (item) {
+            item.understood = understood;
             localStorage.setItem(this.KEYS.WRONG_QUESTIONS, JSON.stringify(wrongQuestions));
         }
     },
@@ -222,18 +237,61 @@ const Storage = {
     /**
      * 获取总体统计
      */
-    getStats() {
+    getStats(quizData = null) {
         const history = this.getQuizHistory();
         const wrongQuestions = this.getWrongQuestions();
         
+        let totalAttempts = history.length;
         let totalQuestions = 0;
         let totalCorrect = 0;
-        let totalAttempts = history.length;
 
+        // 统计已完成的历史记录
         history.forEach(h => {
             totalQuestions += h.totalQuestions;
             totalCorrect += h.correctCount;
         });
+
+        // 统计当前所有章节的答题进度
+        if (quizData && quizData.chapters) {
+            const allProgress = JSON.parse(localStorage.getItem(this.KEYS.ANSWER_PROGRESS) || '{}');
+            
+            Object.keys(allProgress).forEach(chapterId => {
+                const chapterProgress = allProgress[chapterId];
+                const answers = chapterProgress.answers || {};
+                const answeredIds = Object.keys(answers);
+                
+                if (answeredIds.length > 0) {
+                    totalAttempts++; // 增加答题次数
+                    totalQuestions += answeredIds.length; // 增加总题数
+                    
+                    // 查找对应的章节和题目，计算正确数
+                    const chapter = quizData.chapters.find(ch => ch.id === chapterId);
+                    if (chapter) {
+                        // 构建题目ID到题目的映射
+                        const questionMap = {};
+                        chapter.sections.forEach(section => {
+                            section.questions.forEach(q => {
+                                questionMap[q.id] = q;
+                            });
+                        });
+                        
+                        // 计算正确数
+                        answeredIds.forEach(questionId => {
+                            const question = questionMap[questionId];
+                            const userAnswer = answers[questionId];
+                            
+                            if (question && userAnswer) {
+                                const sorted1 = [...question.answer].sort().join(',');
+                                const sorted2 = [...userAnswer].sort().join(',');
+                                if (sorted1 === sorted2) {
+                                    totalCorrect++;
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
 
         return {
             totalAttempts,
@@ -254,10 +312,53 @@ const Storage = {
             localStorage.removeItem(this.KEYS.WRONG_QUESTIONS);
             localStorage.removeItem(this.KEYS.QUIZ_HISTORY);
             localStorage.removeItem(this.KEYS.CHAPTER_PROGRESS);
+            localStorage.removeItem(this.KEYS.ANSWER_PROGRESS);
             this.init();
             return true;
         }
         return false;
+    },
+
+    // ==================== 答题进度 ====================
+
+    /**
+     * 保存章节答题进度（每题的答案）
+     */
+    saveAnswerProgress(chapterId, userAnswers) {
+        const progress = JSON.parse(localStorage.getItem(this.KEYS.ANSWER_PROGRESS) || '{}');
+        progress[chapterId] = {
+            answers: userAnswers,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(this.KEYS.ANSWER_PROGRESS, JSON.stringify(progress));
+    },
+
+    /**
+     * 获取章节答题进度
+     */
+    getAnswerProgress(chapterId) {
+        const progress = JSON.parse(localStorage.getItem(this.KEYS.ANSWER_PROGRESS) || '{}');
+        const chapterProgress = progress[chapterId];
+        
+        if (!chapterProgress) return null;
+        
+        // 如果超过24小时，清除旧数据
+        if (Date.now() - chapterProgress.timestamp > 24 * 60 * 60 * 1000) {
+            delete progress[chapterId];
+            localStorage.setItem(this.KEYS.ANSWER_PROGRESS, JSON.stringify(progress));
+            return null;
+        }
+        
+        return chapterProgress.answers || {};
+    },
+
+    /**
+     * 清除章节答题进度
+     */
+    clearAnswerProgress(chapterId) {
+        const progress = JSON.parse(localStorage.getItem(this.KEYS.ANSWER_PROGRESS) || '{}');
+        delete progress[chapterId];
+        localStorage.setItem(this.KEYS.ANSWER_PROGRESS, JSON.stringify(progress));
     }
 };
 

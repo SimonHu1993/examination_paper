@@ -234,39 +234,205 @@ const App = {
     showWrongBook() {
         const modal = document.getElementById('wrongBookModal');
         const content = document.getElementById('wrongBookContent');
+        
+        // 渲染Tab和列表
+        this.renderWrongBookTabs(content, 'pending');
+        
+        modal.style.display = 'flex';
+    },
+    
+    /**
+     * 渲染错题本Tab和内容
+     */
+    renderWrongBookTabs(content, activeTab) {
         const wrongQuestions = Storage.getWrongQuestions();
-
-        if (wrongQuestions.length === 0) {
-            content.innerHTML = `
+        
+        // 分离待复习和已理解的题目
+        const pendingQuestions = wrongQuestions.filter(w => !w.understood);
+        const understoodQuestions = wrongQuestions.filter(w => w.understood);
+        
+        // 构建Tab HTML
+        let html = `
+            <div class="wrong-book-tabs">
+                <button class="tab-btn ${activeTab === 'pending' ? 'active' : ''}" data-tab="pending">
+                    待复习 (${pendingQuestions.length})
+                </button>
+                <button class="tab-btn ${activeTab === 'understood' ? 'active' : ''}" data-tab="understood">
+                    已理解 (${understoodQuestions.length})
+                </button>
+            </div>
+            <div class="wrong-book-list">
+        `;
+        
+        // 根据当前Tab显示对应的题目
+        const displayQuestions = activeTab === 'pending' ? pendingQuestions : understoodQuestions;
+        
+        if (displayQuestions.length === 0) {
+            html += `
                 <div class="empty-state">
-                    <div class="empty-state-icon">🎉</div>
-                    <p class="empty-state-text">暂无错题，继续保持！</p>
+                    <div class="empty-state-icon"></div>
+                    <p class="empty-state-text">${activeTab === 'pending' ? '暂无待复习的错题，继续保持！' : '暂无已理解的题目'}</p>
                 </div>
             `;
         } else {
-            const html = wrongQuestions.map(wrong => {
+            html += displayQuestions.map(wrong => {
                 const question = this.findQuestionById(wrong.questionId);
                 if (!question) return '';
 
                 return `
-                    <div class="wrong-item">
+                    <div class="wrong-item" data-question-id="${wrong.questionId}">
                         <div class="wrong-item-header">
                             <span class="wrong-item-title">${question.sectionName || '题目'}</span>
                             <span class="wrong-item-meta">${new Date(wrong.timestamp).toLocaleDateString()}</span>
                         </div>
-                        <div class="wrong-item-question">${question.question}</div>
+                        <div class="wrong-item-question">${this.formatText(question.question)}</div>
                         <div class="wrong-item-answers">
                             <span class="your-answer">你的答案：${wrong.userAnswer.join(', ') || '未作答'}</span>
                             <span class="correct-answer">正确答案：${wrong.correctAnswer.join(', ')}</span>
                         </div>
+                        <div class="wrong-item-actions">
+                            <button class="btn" onclick="App.showWrongDetail('${wrong.questionId}')">查看详情</button>
+                            ${activeTab === 'pending' ? `<button class="btn" onclick="App.markAsUnderstood('${wrong.questionId}')">标记为已理解</button>` : `<button class="btn" onclick="App.unmarkAsUnderstood('${wrong.questionId}')">取消标记</button>`}
+                        </div>
                     </div>
                 `;
             }).join('');
+        }
+        
+        html += '</div>';
+        content.innerHTML = html;
+        
+        // 绑定Tab切换事件
+        content.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                this.renderWrongBookTabs(content, tab);
+            });
+        });
+    },
 
-            content.innerHTML = html || '<div class="empty-state"><p>暂无错题</p></div>';
+    /**
+     * 显示错题详情
+     */
+    showWrongDetail(questionId) {
+        const question = this.findQuestionById(questionId);
+        if (!question) return;
+
+        // 获取错题记录
+        const wrongQuestions = Storage.getWrongQuestions();
+        const wrongRecord = wrongQuestions.find(w => w.questionId === questionId);
+        if (!wrongRecord) return;
+
+        // 构建选项HTML（如果是客观题）
+        let optionsHtml = '';
+        if (question.options && question.options.length > 0) {
+            optionsHtml = '<ul class="detail-options-list">';
+            question.options.forEach(option => {
+                const isSelected = wrongRecord.userAnswer.includes(option.label);
+                const isCorrect = question.answer.includes(option.label);
+                let optionClass = 'detail-option-item';
+                if (isCorrect) optionClass += ' correct';
+                if (isSelected && !isCorrect) optionClass += ' incorrect';
+                
+                optionsHtml += `
+                    <li class="${optionClass}">
+                        <span class="option-label">${option.label}</span>
+                        <span class="option-text">${this.formatText(option.text)}</span>
+                        ${isSelected ? '<span class="user-selected-badge">✓ 你的选择</span>' : ''}
+                        ${isCorrect ? '<span class="correct-badge">✓ 正确答案</span>' : ''}
+                    </li>
+                `;
+            });
+            optionsHtml += '</ul>';
+        } else {
+            optionsHtml = `<div class="subjective-note">💡 这是一道主观题，请在纸上作答后查看解析</div>`;
         }
 
-        modal.style.display = 'flex';
+        // 构建解析HTML
+        let explanationHtml = '';
+        if (question.explanation) {
+            // 解析可能包含HTML标签（如表格），需要直接渲染
+            explanationHtml = `
+                <div class="detail-explanation">
+                    <strong>解析：</strong>${question.explanation}
+                </div>
+            `;
+        }
+
+        // 创建详情模态框
+        const detailModal = document.createElement('div');
+        detailModal.className = 'modal detail-modal';
+        detailModal.id = 'wrongDetailModal';
+        detailModal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>错题详情</h3>
+                    <button class="modal-close" id="closeWrongDetail">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-section">
+                        <div class="detail-label">题目</div>
+                        <div class="detail-question">${this.formatText(question.question)}</div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-label">选项与答案</div>
+                        ${optionsHtml}
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-label">答题情况</div>
+                        <div class="detail-answers">
+                            <span class="your-answer">你的答案：${wrongRecord.userAnswer.join(', ') || '未作答'}</span>
+                            <span class="correct-answer">正确答案：${wrongRecord.correctAnswer.join(', ')}</span>
+                        </div>
+                    </div>
+                    
+                    ${explanationHtml}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(detailModal);
+        detailModal.style.display = 'flex';
+
+        // 绑定关闭按钮事件
+        const closeBtn = document.getElementById('closeWrongDetail');
+        closeBtn.addEventListener('click', () => {
+            detailModal.style.display = 'none';
+        });
+
+        // 绑定点击背景关闭事件
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) {
+                detailModal.style.display = 'none';
+            }
+        });
+
+        // MathJax 渲染
+        if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise([detailModal]);
+        }
+    },
+    
+    /**
+     * 标记为已理解
+     */
+    markAsUnderstood(questionId) {
+        Storage.markWrongAsUnderstood(questionId, true);
+        // 重新渲染错题本
+        const content = document.getElementById('wrongBookContent');
+        this.renderWrongBookTabs(content, 'pending');
+    },
+    
+    /**
+     * 取消标记为已理解
+     */
+    unmarkAsUnderstood(questionId) {
+        Storage.markWrongAsUnderstood(questionId, false);
+        // 重新渲染错题本
+        const content = document.getElementById('wrongBookContent');
+        this.renderWrongBookTabs(content, 'understood');
     },
 
     /**
@@ -293,7 +459,8 @@ const App = {
     showStats() {
         const modal = document.getElementById('statsModal');
         const content = document.getElementById('statsContent');
-        const stats = Storage.getStats();
+        // 传入题库数据以计算当前答题进度的正确率
+        const stats = Storage.getStats(this.quizData);
         const history = Storage.getQuizHistory();
 
         let html = `
@@ -358,6 +525,14 @@ const App = {
             }
         }
         return null;
+    },
+
+    /**
+     * 格式化文本（处理换行和特殊符号）
+     */
+    formatText(text) {
+        if (!text) return '';
+        return text.replace(/\n/g, '<br>');
     }
 };
 
